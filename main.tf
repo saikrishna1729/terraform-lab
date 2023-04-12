@@ -1,43 +1,27 @@
-data "aws_ami" "ubuntu" {
-  most_recent = true
-
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  owners = ["099720109477"] # Canonical
-}
-
-resource "aws_instance" "web" {
-  ami           = data.aws_ami.ubuntu.id
-  instance_type = "t3.micro"
-  subnet_id = aws_subnet.my_subnet.id
-
-  tags = {
-    Name = var.VMName
-  }
-}
-
 resource "aws_vpc" "my_vpc" {
-  cidr_block = "10.0.0.0/16"
+  cidr_block = var.vpcCIDR
   tags = {
     Name = var.VPCName
   }
 }
 
-resource "aws_subnet" "my_subnet" {
+resource "aws_subnet" "subneta" {
   vpc_id            = aws_vpc.my_vpc.id
-  cidr_block        = "10.0.0.0/24"
+  cidr_block        = var.subnetaCIDR
   availability_zone = var.AZ
 
   tags = {
-    Name = var.SNName
+    Name = "${join(",",[var.SNName, "-A"])}"
+  }
+}
+
+resource "aws_subnet" "subnetb" {
+  vpc_id            = aws_vpc.my_vpc.id
+  cidr_block        = var.subnetbCIDR
+  availability_zone = var.AZ
+
+  tags = {
+    Name = "${join(",",[var.SNName, "-B"])}"
   }
 }
 

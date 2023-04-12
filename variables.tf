@@ -13,5 +13,17 @@ variable "AZ" {
 
 variable "SNName" {
     default = "Test-Subnet"
-  
+ 
+}
+
+variable "vpcCIDR" {
+
+}
+
+variable "subnetaCIDR" {
+
+}
+
+variable "subnetbCIDR" {
+    
 }
